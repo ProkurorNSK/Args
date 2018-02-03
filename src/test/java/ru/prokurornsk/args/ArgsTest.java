@@ -13,8 +13,8 @@ public class ArgsTest {
 
     @Before
     public void setup() throws ParseException {
-        String[] arg = {"-l", "-s", "abc", "-f", "-e", "-n"};
-        args = new Args("f,l,m,s*,e*", arg);
+        String[] arg = {"-l", "-s", "abc", "-f", "-n", "-t", "456", "-d"};
+        args = new Args("f,l,m,t#,s*,e*,d#", arg);
     }
 
     @Test
@@ -35,5 +35,10 @@ public class ArgsTest {
     @Test
     public void successString() {
         assertEquals(args.getString('s'), "abc");
+    }
+
+    @Test
+    public void successInt() {
+        assertEquals(args.getInt('t'), 456);
     }
 }
