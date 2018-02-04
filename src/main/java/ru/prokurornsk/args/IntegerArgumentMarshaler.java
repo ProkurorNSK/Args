@@ -6,9 +6,12 @@ import java.util.NoSuchElementException;
 class IntegerArgumentMarshaler implements ArgumentMarshaler {
     private int intValue = 0;
 
-    @Override
-    public Object get() {
-        return intValue;
+    public static int getValue(ArgumentMarshaler am) {
+        if (am != null && am instanceof IntegerArgumentMarshaler) {
+            return ((IntegerArgumentMarshaler) am).intValue;
+        } else {
+            return 0;
+        }
     }
 
     @Override

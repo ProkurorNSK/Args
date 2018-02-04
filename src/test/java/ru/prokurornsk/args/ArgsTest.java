@@ -15,7 +15,7 @@ public class ArgsTest {
             String[] arg = new String[]{"-l", "-s", "abc", "-f", "-t", "456"};
             args = new Args("f,l,t#,s*", arg);
         } catch (ArgsException e) {
-            e.errorMessage();
+            System.out.println(e.errorMessage());
         }
     }
 
@@ -47,7 +47,6 @@ public class ArgsTest {
     @Test
     public void testSimpleDoublePresent() throws ArgsException {
         Args args1 = new Args("x##", new String[]{"-x", "42.3"});
-        assertEquals(1, args1.cardinality());
         assertTrue(args1.has('x'));
         assertEquals(42.3, args1.getDouble('x'), .001);
     }

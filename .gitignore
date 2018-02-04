@@ -1,10 +1,4 @@
-bin/
-target/
 build/
 out/
-gradle/
 .gradle/
 /.idea/workspace.xml
-.log
-*.log
-*.db
