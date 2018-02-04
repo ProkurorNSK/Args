@@ -3,8 +3,6 @@ package ru.prokurornsk.args;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.text.ParseException;
-
 import static org.junit.Assert.*;
 
 public class ArgsTest {
@@ -12,9 +10,13 @@ public class ArgsTest {
     private Args args;
 
     @Before
-    public void setup() throws ParseException {
-        String[] arg = {"-l", "-s", "abc", "-f", "-n", "-t", "456", "-d"};
-        args = new Args("f,l,m,t#,s*,e*,d#", arg);
+    public void setup() throws Exception {
+        try {
+            String[] arg = new String[]{"-l", "-s", "abc", "-f", "-t", "456"};
+            args = new Args("f,l,t#,s*", arg);
+        } catch (ArgsException e) {
+            e.errorMessage();
+        }
     }
 
     @Test
@@ -43,11 +45,33 @@ public class ArgsTest {
     }
 
     @Test
-    public void testSimpleDoublePresent() throws Exception {
-        Args args1 = new Args ("x##", new String[] {"-x", "42.3"});
-        assertTrue(args1.isValid());
+    public void testSimpleDoublePresent() throws ArgsException {
+        Args args1 = new Args("x##", new String[]{"-x", "42.3"});
         assertEquals(1, args1.cardinality());
         assertTrue(args1.has('x'));
         assertEquals(42.3, args1.getDouble('x'), .001);
+    }
+
+    @Test
+    public void testInvalidDouble() {
+        try {
+            new Args("x##", new String[]{"-x", "Forty"});
+            fail();
+        } catch (ArgsException e) {
+            assertEquals(ArgsException.ErrorCode.INVALID_DOUBLE, e.getErrorCode());
+            assertEquals('x', e.getErrorArgumentId());
+            assertEquals("Forty", e.getErrorParameter());
+        }
+    }
+
+    @Test
+    public void testMissingDouble() {
+        try {
+            new Args("x##", new String[]{"-x"});
+            fail();
+        } catch (ArgsException e) {
+            assertEquals(ArgsException.ErrorCode.MISSING_DOUBLE, e.getErrorCode());
+            assertEquals('x', e.getErrorArgumentId());
+        }
     }
 }
