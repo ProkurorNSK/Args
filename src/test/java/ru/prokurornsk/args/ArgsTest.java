@@ -39,6 +39,15 @@ public class ArgsTest {
 
     @Test
     public void successInt() {
-        assertEquals(args.getInt('t'), 456);
+        assertEquals(456, args.getInt('t'));
+    }
+
+    @Test
+    public void testSimpleDoublePresent() throws Exception {
+        Args args1 = new Args ("x##", new String[] {"-x", "42.3"});
+        assertTrue(args1.isValid());
+        assertEquals(1, args1.cardinality());
+        assertTrue(args1.has('x'));
+        assertEquals(42.3, args1.getDouble('x'), .001);
     }
 }
